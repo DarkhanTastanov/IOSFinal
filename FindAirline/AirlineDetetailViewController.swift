@@ -7,14 +7,41 @@ class AirlineDetailViewController: UIViewController {
     @IBOutlet weak var icaoLabel: UILabel!
     @IBOutlet weak var iataLabel: UILabel!
     @IBOutlet weak var fleetDescriptionLabel: UILabel!
+    @IBOutlet weak var airlineThemeImageView: UIImageView!
 
     var airline: Airline?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-    }
+        NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange(_:)), name: .themeDidChange, object: nil)
 
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .themeDidChange, object: nil)
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyCurrentTheme()
+    }
+    @objc private func themeDidChange(_ notification: Notification) {
+        guard let isDarkTheme = notification.userInfo?["isDarkTheme"] as? Bool else { return }
+        applyThemeToImage(isDarkTheme: isDarkTheme)
+    }
+    private func applyCurrentTheme() {
+        let isDarkTheme = UserDefaults.standard.bool(forKey: "isDarkTheme")
+        applyThemeToImage(isDarkTheme: isDarkTheme)
+    }
+    private func applyThemeToImage(isDarkTheme: Bool) {
+        if let image = airlineImageView.image {
+            if isDarkTheme {
+                airlineThemeImageView.image = image.withRenderingMode(.alwaysTemplate)
+                airlineThemeImageView.tintColor = .lightGray
+            } else {
+                airlineThemeImageView.image = UIImage(named: "horizont")
+            }
+        }
+    }
     func configureView() {
         guard let airline = airline else { return }
         airlineName.text = airline.name

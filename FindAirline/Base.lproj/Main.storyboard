@@ -11,7 +11,7 @@
         <!--Settings-->
         <scene sceneID="4ph-Fd-6rJ">
             <objects>
-                <viewController id="94S-Pe-iyC" customClass="SettingsViewController" customModule="FindAirline" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingsViewController" id="94S-Pe-iyC" customClass="SettingsViewController" customModule="FindAirline" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1JQ-r4-for">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -50,7 +50,7 @@
         <!--Airlines-->
         <scene sceneID="wbT-0J-ZY0">
             <objects>
-                <viewController title="Airlines" id="hIe-Wu-njh" customClass="AirlinesViewController" customModule="FindAirline" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AirlinesViewController" title="Airlines" id="hIe-Wu-njh" customClass="AirlinesViewController" customModule="FindAirline" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="c8c-BT-qMD">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -103,6 +103,7 @@
                                         <connections>
                                             <outlet property="airlineImageView" destination="EHl-FP-v4A" id="cT0-dt-pf7"/>
                                             <outlet property="airlineName" destination="3Bw-Ct-yda" id="BaW-2p-n2L"/>
+                                            <outlet property="airlineThemeImageView" destination="fP3-wQ-wOp" id="ITU-l7-mef"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -155,7 +156,7 @@
         <!--Airline Detail View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="AirlinesViewController" id="BYZ-38-t0r" customClass="AirlineDetailViewController" customModule="FindAirline" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AirlineDetailViewController" id="BYZ-38-t0r" customClass="AirlineDetailViewController" customModule="FindAirline" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -235,6 +236,7 @@
                     <connections>
                         <outlet property="airlineImageView" destination="sER-hL-X3X" id="jFn-9N-N6U"/>
                         <outlet property="airlineName" destination="Udr-2e-ANQ" id="NJJ-Dk-Zxd"/>
+                        <outlet property="airlineThemeImageView" destination="PBY-Nu-Ro8" id="vce-3f-sti"/>
                         <outlet property="fleetDescriptionLabel" destination="iNI-IH-6aE" id="EKJ-1V-q4H"/>
                         <outlet property="iataLabel" destination="JMD-b7-Pcm" id="QLy-sH-DcX"/>
                         <outlet property="icaoLabel" destination="2R5-AR-fqt" id="6Rl-10-6aa"/>

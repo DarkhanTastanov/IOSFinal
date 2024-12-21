@@ -25,6 +25,7 @@ class AirlinesViewController: UIViewController, UITableViewDelegate, UITableView
         } else {
             fetchAirlines(searchText: "")
         }
+        loadSavedAirlines()
     }
     
     
@@ -32,6 +33,7 @@ class AirlinesViewController: UIViewController, UITableViewDelegate, UITableView
         self.airlines = airlines
         self.filteredAirlines = airlines
         tableView.reloadData()
+        saveAirlines()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -47,7 +49,7 @@ class AirlinesViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedAirline = filteredAirlines[indexPath.row]
-        let detailVC = storyboard?.instantiateViewController(withIdentifier: "AirlinesViewController") as! AirlineDetailViewController
+        let detailVC = storyboard?.instantiateViewController(withIdentifier: "AirlineDetailViewController") as! AirlineDetailViewController
         detailVC.airline = selectedAirline
         navigationController?.pushViewController(detailVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
@@ -70,6 +72,19 @@ class AirlinesViewController: UIViewController, UITableViewDelegate, UITableView
         UserDefaults.standard.set(searchText, forKey: "savedSearchText")
         
         fetchAirlines(searchText: searchText)
+    }
+    func saveAirlines() {
+        guard let encodedAirlines = try? JSONEncoder().encode(self.airlines) else { return }
+        UserDefaults.standard.set(encodedAirlines, forKey: "savedAirlines")
+    }
+
+    func loadSavedAirlines() {
+        guard let savedAirlinesData = UserDefaults.standard.data(forKey: "savedAirlines") else { return }
+        if let savedAirlines = try? JSONDecoder().decode([Airline].self, from: savedAirlinesData) {
+            self.airlines = savedAirlines
+            self.filteredAirlines = savedAirlines
+            tableView.reloadData()
+        }
     }
 }
 

@@ -30,12 +30,14 @@ class SettingsViewController: UIViewController {
         return UserDefaults.standard.bool(forKey: "isDarkTheme") ? .black : .white
     }
 }
-
 extension AppDelegate {
     func applyTheme(isDarkTheme: Bool) {
         let preference = isDarkTheme ? "dark" : "light"
         UIApplication.shared.keyWindow?.overrideUserInterfaceStyle = preference == "dark" ? .dark : .light
-        
+        NotificationCenter.default.post(name: .themeDidChange, object: nil, userInfo: ["isDarkTheme": isDarkTheme])
     }
 }
 
+extension Notification.Name {
+    static let themeDidChange = Notification.Name("themeDidChange")
+}
