@@ -6,6 +6,7 @@ struct Airline: Codable {
     let fleet: Fleet
     let logoURL: String?
     let name: String
+    var isFavorite: Bool = false
 
     enum CodingKeys: String, CodingKey {
         case name = "name"

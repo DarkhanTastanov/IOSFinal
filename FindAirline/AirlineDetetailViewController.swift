@@ -8,13 +8,15 @@ class AirlineDetailViewController: UIViewController {
     @IBOutlet weak var iataLabel: UILabel!
     @IBOutlet weak var fleetDescriptionLabel: UILabel!
     @IBOutlet weak var airlineThemeImageView: UIImageView!
-
+    @IBOutlet weak var favoriteButton: UIButton!
+    
     var airline: Airline?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
         NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange(_:)), name: .themeDidChange, object: nil)
+        updateFavoriteButtonAppearance()
 
     }
     deinit {
@@ -23,7 +25,24 @@ class AirlineDetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyCurrentTheme()
+        updateFavoriteButtonAppearance()
     }
+    func configureView() {
+        guard let airline = airline else { return }
+        airlineName.text = airline.name
+        icaoLabel.text = "ICAO: \(airline.icao)"
+        iataLabel.text = "IATA: \(airline.iata)"
+        fleetDescriptionLabel.text = "Fleet: \(formatFleetDescription(airline.fleet))"
+
+        if let url = URL(string: airline.logoURL ?? "") {
+            airlineImageView.kf.setImage(with: url)
+        } else {
+            airlineImageView.image = UIImage(named: "placeholder")
+        }
+        updateFavoriteButtonAppearance()
+
+    }
+    
     @objc private func themeDidChange(_ notification: Notification) {
         guard let isDarkTheme = notification.userInfo?["isDarkTheme"] as? Bool else { return }
         applyThemeToImage(isDarkTheme: isDarkTheme)
@@ -42,17 +61,26 @@ class AirlineDetailViewController: UIViewController {
             }
         }
     }
-    func configureView() {
-        guard let airline = airline else { return }
-        airlineName.text = airline.name
-        icaoLabel.text = "ICAO: \(airline.icao)"
-        iataLabel.text = "IATA: \(airline.iata)"
-        fleetDescriptionLabel.text = "Fleet: \(formatFleetDescription(airline.fleet))"
+    
+    
+    @IBAction func favoriteButtonTapped(_ sender: UIButton) {
+        guard var airline = airline else { return }
 
-        if let url = URL(string: airline.logoURL ?? "") {
-            airlineImageView.kf.setImage(with: url)
+        if FavoritesManager.shared.isFavorite(airline) {
+            FavoritesManager.shared.removeFavorite(airline)
+            airline.isFavorite = false
         } else {
-            airlineImageView.image = UIImage(named: "placeholder")
+            FavoritesManager.shared.addFavorite(airline)
+            airline.isFavorite = true
+        }
+
+        updateFavoriteButtonAppearance()
+    }
+    private func updateFavoriteButtonAppearance() {
+        if let airline = airline, FavoritesManager.shared.isFavorite(airline) {
+            favoriteButton.tintColor = .red
+        } else {
+            favoriteButton.tintColor = .systemBlue
         }
     }
     func formatFleetDescription(_ fleet: Fleet) -> String {
